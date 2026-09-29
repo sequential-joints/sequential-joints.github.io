@@ -1,16 +1,33 @@
-# Nerfies
+# PokeNet project page
 
-This is the repository that contains source code for the [Nerfies website](https://nerfies.github.io).
+Website for **PokeNet: Learning Kinematic Models of Articulated Objects from Human Observations** (ICRA 2026).
 
-If you find Nerfies useful for your work please cite:
+- Live site: https://sequential-joints.github.io
+- Paper: https://arxiv.org/abs/2602.02741
+- Code: https://github.com/gupta-anmol99/Object-Kinematic-Modeling
+
+## Layout
+
+- `index.html`: the page
+- `static/css/site.css`: styles
+- `static/js/results.js`: results charts (data from Tables II and III of the paper)
+- `static/videos/method/`: method animations (rendered from `manim/`)
+- `manim/`: Manim scenes for the method animations
+
+## Re-rendering the animations
+
+Requires the `website` conda env (`conda create -n website -c conda-forge python=3.11 manim ffmpeg`).
+
+```bash
+bash manim/render.sh
 ```
-@article{park2021nerfies
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}
+
+This renders every scene at 1080p and writes web-ready `.mp4` files and poster images to `static/videos/method/`.
+
+## Preview locally
+
+```bash
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-# Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+Website template adapted from [Nerfies](https://github.com/nerfies/nerfies.github.io) (CC BY-SA 4.0).

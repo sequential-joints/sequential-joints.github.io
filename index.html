@@ -1,326 +1,463 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="PokeNet: Learning Kinematic Models of Articulated Objects from
-        Human Observations">
-  <meta name="keywords" content="PokeNet, Articulation, Kinematics">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PokeNet: Learning Kinematic Models of Articulated Objects from
-    Human Observations</title>
+  <title>PokeNet: Learning Kinematic Models of Articulated Objects from Human Observations</title>
+  <meta name="description"
+        content="PokeNet estimates joint parameters, manipulation order and per-frame joint states of articulated objects from a single human demonstration. ICRA 2026.">
+  <meta name="keywords" content="PokeNet, Articulation, Kinematics, Articulated Objects, Robotics, ICRA 2026">
+  <meta property="og:title" content="PokeNet: Learning Kinematic Models of Articulated Objects from Human Observations">
+  <meta property="og:description" content="Joint parameters, manipulation order and joint states from a single human demonstration. ICRA 2026.">
+  <meta property="og:image" content="./static/videos/method/overview.jpg">
 
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KT7RBT9E0M"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KT7RBT9E0M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KT7RBT9E0M');
+  </script>
 
-  gtag('config', 'G-KT7RBT9E0M');
-</script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
-
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <link rel="stylesheet" href="./static/css/site.css">
   <link rel="icon" href="./static/images/computer.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <script defer src="./static/js/results.js"></script>
 </head>
 <body>
 
-
-
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">PokeNet: Learning Kinematic Models of Articulated Objects from
-            Human Observations</h1>
-            <h2 class="publication-venue">Published at International Conference on Robotics and Automation (ICRA) 2026
-            </h2>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              
-            <span class="author-block">
-              <a href="https://www.anmolgupta.in/">Anmol Gupta</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="https://weiweigu1998.github.io/">Weiwei Gu</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://omkarpatil18.github.io/">Omkar Patil</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://junkilee.github.io/">Jun Ki Lee</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://nakulgopalan.github.io/">Nakul Gopalan</a><sup>1</sup>,
-            </span>
-           
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Arizona State University,</span>
-            <span class="author-block"><sup>2</sup>Seoul National University</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://drive.google.com/file/d/1gPiaPFOxbIKFJ9QopQYj6dot_ISo3yVM/view?usp=sharing"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2602.02741"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <!-- <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span> -->
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href=""
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code (Coming Soon)</span>
-                  </a>
-              </span>
-              <!-- Dataset Link. -->
-              <!-- <span class="link-block">
-                <a href=""
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data (Coming Soon)</span>
-                  </a>
-                </span> -->
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round">
+          <path d="M5 4v16h14" stroke="#6c7a89"/>
+          <path d="M19 20 L11 12" stroke="#2e86ab"/>
+          <path d="M8 15h7" stroke="#d9674a"/>
+        </svg>
+      </span>
+      PokeNet
+    </a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+    <span class="venue-pill">ICRA 2026</span>
   </div>
-</section>
+</header>
 
-<!-- <section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section> -->
+<main id="top">
 
-<!-- 
-<section class="hero is-light is-small">
-  <div class="hero-body">
+  <!-- ============================================================ HERO -->
+  <section class="hero">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
+      <h1><span class="name">PokeNet</span>: Learning Kinematic Models of Articulated Objects from Human Observations</h1>
+      <p class="authors">
+        <a href="https://gupta-anmol99.github.io/">Anmol Gupta</a><sup>1</sup>,&nbsp;
+        <a href="https://weiweigu1998.github.io/">Weiwei Gu</a><sup>1</sup>,&nbsp;
+        <a href="https://omkarpatil18.github.io/">Omkar Patil</a><sup>1</sup>,&nbsp;
+        <a href="https://junkilee.github.io/">Jun Ki Lee</a><sup>2</sup>,&nbsp;
+        <a href="https://nakulgopalan.github.io/">Nakul Gopalan</a><sup>1</sup>
+      </p>
+      <p class="affil"><sup>1</sup>Arizona State University &nbsp;·&nbsp; <sup>2</sup>Seoul National University</p>
+
+      <div class="hero-actions">
+        <a class="btn" href="https://drive.google.com/file/d/1gPiaPFOxbIKFJ9QopQYj6dot_ISo3yVM/view?usp=sharing">
+          <i class="fas fa-file-pdf"></i> Paper</a>
+        <a class="btn" href="https://arxiv.org/abs/2602.02741"><i class="ai ai-arxiv"></i> arXiv</a>
+        <a class="btn" href="https://github.com/gupta-anmol99/Object-Kinematic-Modeling"><i class="fab fa-github"></i> Code</a>
+        <a class="btn" href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
+      </div>
+
+      <p class="tldr">
+        Watch a person manipulate an unknown object once, and recover its full kinematic model:
+        <strong>which joints exist</strong>, <strong>where their axes are</strong>,
+        <strong>the order they must be operated in</strong>, and <strong>how far each one moved</strong> at every frame.
+      </p>
+
+      <div class="video-frame" id="overview">
+        <video controls playsinline preload="metadata" poster="./static/images/poster.png">
+          <source src="./static/videos/pokenet-main.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="callout-grid">
+        <div class="callout"><strong>1</strong><span>human demonstration from a single camera view, with no object priors</span></div>
+        <div class="callout"><strong>+27%</strong><span>avg. improvement in joint axis &amp; state accuracy over prior SOTA</span></div>
+        <div class="callout"><strong>4</strong><span>unseen object categories handled in simulation</span></div>
+        <div class="callout"><strong>5,500</strong><span>annotated real-world point-cloud sequences released</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ ABSTRACT -->
+  <section class="section" id="abstract">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <div class="eyebrow">Abstract</div>
+          <h2>Joint order matters. So do the joints you cannot see yet.</h2>
         </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
+        <p class="section-copy">
+          A dishwasher's rack is invisible until the door is opened, and it can only be pulled out after.
+          PokeNet learns both facts from watching a person use the object.
+        </p>
+      </div>
+      <div class="card abstract reveal">
+        <p>
+          Articulation modeling enables robots to learn joint parameters of articulated objects for effective
+          manipulation which can then be used downstream for skill learning or planning. Existing approaches often
+          rely on prior knowledge about the objects, such as the number or type of joints. Some of these approaches
+          also fail to recover occluded joints that are only revealed during interaction. Others require large
+          numbers of multi-view images for every object, which is impractical in real-world settings. Furthermore,
+          prior works neglect the order of manipulations, which is essential for many multi-DoF objects where one
+          joint must be operated before another, such as a dishwasher.
+        </p>
+        <p>
+          We introduce PokeNet, an end-to-end framework that estimates articulation models from a single human
+          demonstration without prior object knowledge. Given a sequence of point cloud observations of a human
+          manipulating an unknown object, PokeNet predicts joint parameters, infers manipulation order, and tracks
+          joint states over time. PokeNet outperforms existing state-of-the-art methods, improving joint axis and
+          state estimation accuracy by an average of over 27% across diverse objects, including novel and unseen
+          categories. We demonstrate these gains in both simulation and real-world environments.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ METHOD -->
+  <section class="section" id="method">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <div class="eyebrow">Method</div>
+          <h2>From a point cloud video to an ordered articulation model.</h2>
         </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
+        <p class="section-copy">
+          PokeNet is a single end-to-end network. It encodes every frame of the demonstration, reasons about
+          how the object moves over time, and then decodes a <em>set</em> of joint hypotheses. Each hypothesis
+          carries its own type, axis, order and per-frame state. There is no category label and no fixed joint count.
+        </p>
+      </div>
+
+      <div class="video-frame reveal">
+        <video autoplay muted loop playsinline preload="auto" poster="./static/videos/method/overview.jpg"
+               aria-label="Animated overview of the PokeNet architecture">
+          <source src="./static/videos/method/overview.mp4" type="video/mp4">
+        </video>
+      </div>
+      <p class="caption reveal">
+        <strong>Architecture overview.</strong> Each frame is encoded by PointNet++ and a spatial transformer
+        into one token. A temporal transformer relates the tokens across time. A DETR-style decoder turns
+        <em>K</em> learnable queries into joint slots, and a joint state block tracks every slot over time.
+        Slots above the confidence threshold, sorted by their order score, form the final articulation model.
+      </p>
+
+      <!-- problem setup -->
+      <div class="lede reveal">
+        <div>
+          <h3>What PokeNet predicts</h3>
+          <p>
+            The input is a sequence of point clouds
+            $\mathcal P = \{P_1,\dots,P_T\}$, $P_t\in\mathbb R^{N\times 3}$, recorded from one camera
+            while a person manipulates the object. A new object has an unknown number of joints and an
+            unknown operating order, so a fixed-size output head cannot describe it.
+          </p>
+          <p>
+            PokeNet therefore treats articulation as <strong>set prediction</strong>. It always outputs
+            $K$ slots (the maximum number of joints), and each slot describes one hypothesised joint:
+          </p>
+          <p style="text-align:center">$s_k = \{\,c_k,\ \tau_k,\ \mathbf d_k,\ \mathbf p_k,\ o_k\,\}$</p>
+          <p>
+            At inference PokeNet keeps the slots with $c_k &gt; \mu$ and sorts them by $o_k$. The result
+            is an ordered list of joints, each with its per-frame state.
+          </p>
         </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
+        <div class="slot-demo" aria-label="Illustration of a predicted slot set">
+          <div class="row-label"><span>One slot</span><span>five prediction heads</span></div>
+          <div class="slot-row">
+            <div class="slot-chip"><span class="sym">$c_k$</span><small>confidence</small></div>
+            <div class="slot-chip"><span class="sym">$\tau_k$</span><small>revolute / prismatic</small></div>
+            <div class="slot-chip"><span class="sym">$\mathbf d_k$</span><small>axis direction</small></div>
+            <div class="slot-chip"><span class="sym">$\mathbf p_k$</span><small>anchor point</small></div>
+            <div class="slot-chip"><span class="sym">$o_k$</span><small>order in $[0,1]$</small></div>
+          </div>
+          <div class="row-label"><span>All $K$ slots for a dishwasher demo</span><span>kept → ordered</span></div>
+          <div class="slot-list">
+            <div class="slot-line"><span>$s_1$</span><span class="conf"><i style="width:94%"></i></span><span class="tag rev">① door · rev</span></div>
+            <div class="slot-line off"><span>$s_2$</span><span class="conf"><i style="width:5%"></i></span><span class="tag">—</span></div>
+            <div class="slot-line"><span>$s_3$</span><span class="conf"><i style="width:91%"></i></span><span class="tag pri">② rack · pri</span></div>
+            <div class="slot-line off"><span>$s_4$</span><span class="conf"><i style="width:7%"></i></span><span class="tag">—</span></div>
+            <div class="slot-line off"><span>$s_5$</span><span class="conf"><i style="width:4%"></i></span><span class="tag">—</span></div>
+          </div>
         </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
+      </div>
+
+      <!-- stage cards -->
+      <div class="stage-list">
+
+        <article class="stage-card reveal">
+          <div class="stage-video">
+            <video autoplay muted loop playsinline preload="none" poster="./static/videos/method/spatial.jpg"
+                   aria-label="Spatial encoding animation">
+              <source src="./static/videos/method/spatial.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="stage-body">
+            <div class="stage-kicker"><span>1</span> Spatial encoding: one frame, one token.</div>
+            <p>
+              Each frame $P_t$ is passed through <strong>PointNet++</strong>. It samples centroids, groups their
+              neighbours, and produces $Q$ local point features
+              $X_t=\{x_{t,1},\dots,x_{t,Q}\}\in\mathbb R^{Q\times D}$.
+            </p>
+            <p>
+              A learnable <strong>[CLS]</strong> token is prepended, and a lightweight transformer lets it attend over
+              the local features. Its output $\hat c_t\in\mathbb R^{D}$ summarises the whole frame, including
+              where the hand is and which parts have moved.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage-card reveal">
+          <div class="stage-video">
+            <video autoplay muted loop playsinline preload="none" poster="./static/videos/method/temporal.jpg"
+                   aria-label="Temporal encoding animation">
+              <source src="./static/videos/method/temporal.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="stage-body">
+            <div class="stage-kicker"><span>2</span> Temporal encoding: reasoning across the demonstration.</div>
+            <p>
+              A single frame cannot reveal an axis. Motion can. The sequence
+              $\{\hat c_1,\dots,\hat c_T\}$ goes through a second transformer encoder, which attends across
+              time and relates what moved, when, and in which direction.
+            </p>
+            <p>
+              The resulting <strong>sequence encodings</strong> act as a memory shared by both decoders. This is
+              also how joints that are <em>occluded at the start</em> get recovered: the dishwasher rack appears
+              only after the door opens, and the temporal encoder can see both events.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage-card reveal">
+          <div class="stage-video">
+            <video autoplay muted loop playsinline preload="none" poster="./static/videos/method/decoder.jpg"
+                   aria-label="Joint set decoder animation">
+              <source src="./static/videos/method/decoder.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="stage-body">
+            <div class="stage-kicker"><span>3</span> Joint set decoder: K queries become K joint hypotheses.</div>
+            <p>
+              Following DETR, a fixed set of $K$ <strong>learnable joint queries</strong> cross-attends to the
+              temporal memory. Each query specialises into a slot, and small heads read out its confidence $c$,
+              type $\tau$, unit axis $\mathbf d\in\mathbb R^3$, anchor point $\mathbf p\in\mathbb R^3$, and
+              order score $o\in[0,1]$.
+            </p>
+            <p>
+              Low-confidence slots are discarded, so the number of joints is <em>predicted</em> and never given.
+              Sorting the remaining slots by $o$ yields the manipulation sequence, for example
+              <span class="pill">door → rack</span>.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage-card reveal">
+          <div class="stage-video">
+            <video autoplay muted loop playsinline preload="none" poster="./static/videos/method/states.jpg"
+                   aria-label="Joint state block animation">
+              <source src="./static/videos/method/states.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="stage-body">
+            <div class="stage-kicker"><span>4</span> Joint state block: tracking every joint over time.</div>
+            <p>
+              An auxiliary decoder outputs a state $y_{t,k}\in\mathbb R^3$ for every slot $k$ and every frame $t$.
+              A revolute slot uses $(\sin\theta,\cos\theta,0)$, which avoids the discontinuity at
+              $0^\circ/360^\circ$. A prismatic slot uses $(0,0,\rho)$ for linear displacement.
+            </p>
+            <p>
+              Every slot therefore shares one consistent $K\times T\times 3$ output. Only the states of slots
+              that pass the confidence threshold are kept.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage-card reveal">
+          <div class="stage-video">
+            <video autoplay muted loop playsinline preload="none" poster="./static/videos/method/matching.jpg"
+                   aria-label="Hungarian matching and loss animation">
+              <source src="./static/videos/method/matching.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="stage-body">
+            <div class="stage-kicker"><span>5</span> Training: Hungarian matching and a permutation-invariant loss.</div>
+            <p>
+              Slots have no fixed order, so during training PokeNet first matches predicted slots to the $M$
+              ground-truth joints with the <strong>Hungarian algorithm</strong>. The matching cost combines axis
+              direction, anchor consistency and joint type. Unmatched slots are trained towards $c=0$.
+            </p>
+            <p>
+              Matched slots are supervised on type (CE), axis ($1-|\langle\hat{\mathbf d},\mathbf d\rangle|$,
+              sign-invariant), anchor (point-to-line MSE) and state (MSE). The order score is regressed to
+              $\tilde r = r/\max(1,M-1)$ and constrained by a pairwise ranking hinge
+              $\hat o_i + m \le \hat o_j$ for $i\prec j$.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <details class="figure reveal">
+        <summary>Show the full architecture figure from the paper</summary>
+        <div class="video-frame">
+          <img src="./static/images/architecture.png" loading="lazy"
+               alt="PokeNet architecture: point cloud video, PointNet++, spatial encoder, temporal encoder, joint set decoder with learnable joint queries, joint state block, Hungarian matching.">
         </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============================================================ RESULTS -->
+  <section class="section" id="results">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <div class="eyebrow">Results</div>
+          <h2>More accurate axes and states, on seen and unseen objects.</h2>
         </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
+        <p class="section-copy">
+          On 30,000 simulated test sequences PokeNet improves joint axis accuracy by 25% over GAPartNet. On
+          1,600 real-world sequences the improvement is 30%, and on two unseen real objects (a slider knife and
+          a stapler) it reaches 40%.
+        </p>
+      </div>
+
+      <div class="results-grid">
+        <div class="table-card reveal">
+          <h3>Capabilities</h3>
+          <p class="sub">PokeNet is the only method that handles multi-joint objects, recovers occluded joints, and predicts both joint states and manipulation order.</p>
+          <div class="table-scroll">
+            <table class="res cap">
+              <thead><tr><th>Method</th><th>Single joint</th><th>Multi-joint</th><th>Occluded</th><th>Joint state</th><th>Order</th></tr></thead>
+              <tbody>
+                <tr><td>ScrewNet</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td><td class="no">✗</td></tr>
+                <tr><td>GAPartNet</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+                <tr class="ours"><td>PokeNet (ours)</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
+
+        <div class="table-card chart-card reveal" id="chart-real">
+          <h3>Real-world human demonstrations</h3>
+          <p class="sub">1,600 test sequences on four household objects, plus two objects never seen in training.
+            Dots are mean error, bars are 95% confidence intervals, and lower is better. GAPartNet does not predict joint states.</p>
+          <div class="dp-legend" aria-hidden="true">
+            <span><i style="background:#4b4fc4"></i>PokeNet (ours)</span>
+            <span><i style="background:#d9674a"></i>GAPartNet</span>
+            <span><i style="background:#0f98a8"></i>ScrewNet</span>
+          </div>
+          <div class="dp-panels"></div>
+          <details class="dp-table"><summary>View as table</summary></details>
+        </div>
+
+        <div class="table-card chart-card reveal" id="chart-sim">
+          <h3>Simulation (PartNet-Mobility)</h3>
+          <p class="sub">30,000 test sequences over 15 categories, four of them held out from training.
+            PokeNet has the lowest error on every category and every metric.</p>
+          <div class="dp-legend" aria-hidden="true">
+            <span><i style="background:#4b4fc4"></i>PokeNet (ours)</span>
+            <span><i style="background:#d9674a"></i>GAPartNet</span>
+            <span><i style="background:#0f98a8"></i>ScrewNet</span>
+          </div>
+          <div class="dp-panels"></div>
+          <details class="dp-table"><summary>View as table</summary></details>
+        </div>
+
+        <div class="table-card reveal">
+          <h3>Tracking every joint through a demonstration</h3>
+          <p class="sub">A held-out synthetic object with two revolute joints, operated one after the other.</p>
+          <img src="./static/images/joint-states.jpg" loading="lazy" style="width:100%;height:auto"
+               alt="Point cloud frames of a two-door object being opened; predicted versus ground-truth joint states over 12 frames; PCA of per-frame temporal embeddings.">
+          <p class="caption" style="text-align:left;max-width:none">
+            <strong>Top:</strong> input point clouds, coloured by the joint that is moving.
+            <strong>Bottom:</strong> predicted joint states (solid) against ground truth (dashed), relative to the
+            first frame; the joint state block recovers the order of the two motions.
+            <strong>Right:</strong> the temporal encoder's per-frame embeddings projected with PCA. The trajectory
+            turns when the second joint starts moving.
+          </p>
         </div>
       </div>
     </div>
-  </div>
-</section> -->
+  </section>
 
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-    
-        <!-- Responsive 16:9 wrapper -->
-        <div class="publication-video" style="position:relative;">
-          <video
-            controls
-            playsinline
-            preload="metadata"
-            style="position:absolute; left:0; top:0; width:100%; height:100%;"
-            poster="./static/images/poster.png"
-          >
-            <source src="./static/videos/pokenet-main.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </div>
-    </div>
-    
-    <!--/ Paper video. -->
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Articulation modeling enables robots to learn joint
-parameters of articulated objects for effective manipulation
-which can then be used downstream for skill learning or
-planning. 
-          </p>
-          <p>
-            Existing approaches often rely on prior knowledge
-about the objects, such as the number or type of joints. Some
-of these approaches also fail to recover occluded joints that are
-only revealed during interaction. Others require large numbers
-of multi-view images for every object, which is impractical
-in real-world settings. Furthermore, prior works neglect the
-order of manipulations, which is essential for many multi-
-DoF objects where one joint must be operated before another,
-such as a dishwasher.
-          </p>
-          <p>
-            We introduce PokeNet, an end-to-end
-framework that estimates articulation models from a single
-human demonstration without prior object knowledge. Given a
-sequence of point cloud observations of a human manipulating
-an unknown object, PokeNet predicts joint parameters, infers
-manipulation order, and tracks joint states over time. PokeNet
-outperforms existing state-of-the-art methods, improving joint
-axis and state estimation accuracy by an average of over 27%
-across diverse objects, including novel and unseen categories.
-We demonstrate these gains in both simulation and real-world
-environments.
-          </p>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
-
-    
-  </div>
-</section>
-
-
-
-
-<!-- <section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+  <!-- ============================================================ BIBTEX -->
+  <section class="section" id="bibtex">
+    <div class="container">
+      <div class="eyebrow">Citation</div>
+      <h2 style="margin:0 0 18px">BibTeX</h2>
+      <pre class="bib"><button class="copy-btn" type="button">Copy</button><code id="bib-code">@misc{gupta2026pokenetlearningkinematicmodels,
+      title={PokeNet: Learning Kinematic Models of Articulated Objects from Human Observations},
+      author={Anmol Gupta and Weiwei Gu and Omkar Patil and Jun Ki Lee and Nakul Gopalan},
+      year={2026},
+      eprint={2602.02741},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2602.02741},
 }</code></pre>
-  </div>
-</section> -->
+    </div>
+  </section>
+</main>
 
-
-<footer class="footer">
+<footer>
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          
-          <p>
-            <p> Website borrowed from <a href="https://github.com/nerfies/nerfies.github.io">NeRFies</a> under a <a
-              href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0
-              International</a>
-          </p>
-          </p>
-        </div>
-      </div>
-    </div>
+    Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+    under a <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> license.
+    Method animations made with <a href="https://www.manim.community/">Manim</a>.
   </div>
 </footer>
 
+<script>
+  // ---- copy bibtex
+  document.querySelector('.copy-btn').addEventListener('click', e => {
+    navigator.clipboard.writeText(document.getElementById('bib-code').innerText).then(() => {
+      e.target.textContent = 'Copied!'; setTimeout(() => e.target.textContent = 'Copy', 1500);
+    });
+  });
+
+  // ---- reveal on scroll + play videos only when visible
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) en.target.classList.add('visible');
+  }), { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const vo = new IntersectionObserver(entries => entries.forEach(en => {
+    const v = en.target;
+    if (en.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
+  }), { threshold: 0.25 });
+  document.querySelectorAll('video[autoplay]').forEach(v => vo.observe(v));
+
+  // ---- math
+  window.addEventListener('DOMContentLoaded', () => {
+    renderMathInElement(document.body, {
+      delimiters: [{ left: '$', right: '$', display: false }],
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+    });
+  });
+</script>
 </body>
 </html>
